@@ -1,0 +1,1 @@
+from diabeticRetinopathy.entity.config_entity import *
