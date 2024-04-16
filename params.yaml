@@ -3,7 +3,7 @@ IMAGE_SIZE: [512, 512, 3]
 BATCH_SIZE: 16
 INCLUDE_TOP: False
 EPOCHS: 5
-CLASSES: 2
+CLASSES: ['No DR', 'Mild', 'Moderate', 'Severe', 'Proliferative DR']
 WEIGHTS: imagenet
 LEARNING_RATE: 0.01
 DROPOUT_RATE: 0.5

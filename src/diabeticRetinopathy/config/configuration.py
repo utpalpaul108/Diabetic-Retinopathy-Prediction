@@ -9,7 +9,6 @@ class ConfigurationManager:
         
         self.config = read_yaml(config_filepath)
         self.params = read_yaml(params_filepath)
-
         create_directories([self.config.artifacts_root])
 
     def get_data_ingestion_config(self) -> DataIngestionConfig: 
@@ -28,8 +27,6 @@ class ConfigurationManager:
     def get_prepare_base_model_config(self) -> PrepareBaseModelConfig:
 
         config = self.config.prepare_base_model
-        data_ingestion_config = self.config.data_ingestion
-        
         create_directories([config.root_dir])
         
         prepare_base_model_config = PrepareBaseModelConfig(
@@ -41,8 +38,7 @@ class ConfigurationManager:
             params_dropout_rate = self.params.DROPOUT_RATE,
             params_include_top = self.params.INCLUDE_TOP,
             params_weights = self.params.WEIGHTS,
-            # params_classes = self.params.CLASSES
-            params_classes = int(len(os.listdir(data_ingestion_config.dataset_dir))) # Dymanic classes, taken from dataset directory
+            params_classes = len(self.params.CLASSES)
         )
 
         return prepare_base_model_config
@@ -61,29 +57,22 @@ class ConfigurationManager:
         return prepare_callbacks_config
     
     def get_training_config(self) -> TrainingConfig:
-        # base_model_config = self.config.prepare_base_model
+        base_model_config = self.config.prepare_base_model
         training_config = self.config.training
-        # data_ingestion_config = self.config.data_ingestion
-        # params = self.params
-
+        params = self.params
         create_directories([Path(training_config.root_dir)])
         
-        # training_config = TrainingConfig(
-        #     root_dir = Path(training_config.root_dir),
-        #     trained_ml_model_path = Path(training_config.trained_ml_model_path),
-        #     ml_preprocessor_path = Path(training_config.ml_preprocessor_path),
-        #     # updated_base_model_path = Path(base_model_config.updated_base_model_path),
-        #     # training_data = Path(data_ingestion_config.dataset_dir),
-        #     # params_epochs =  params.EPOCHS,
-        #     # params_batch_size = params.BATCH_SIZE,
-        #     # params_is_augmentation = params.AUGMENTATION,
-        #     # params_image_size = params.IMAGE_SIZE
-        # )
-
-        training_config = {
-            'trained_ml_model_path':training_config.trained_ml_model_path,
-            'ml_preprocessor_path': training_config.ml_preprocessor_path
-        }
+        training_config = TrainingConfig(
+            root_dir = Path(training_config.root_dir),
+            trained_model_path = Path(training_config.trained_model_path),
+            updated_base_model_path = Path(base_model_config.updated_base_model_path),
+            training_path = Path(training_config.training_file_path),
+            training_images_path = Path(training_config.training_images_path),
+            params_epochs =  params.EPOCHS,
+            params_batch_size = params.BATCH_SIZE,
+            params_is_augmentation = params.AUGMENTATION,
+            params_image_size = params.IMAGE_SIZE
+        )
 
         return training_config
     
@@ -91,7 +80,8 @@ class ConfigurationManager:
         
         eval_config = EvaluationConfig(
             path_of_model =  Path(self.config.training.trained_model_path),
-            training_data = Path(self.config.data_ingestion.dataset_dir),
+            training_path = Path(self.config.training.training_file_path),
+            training_images_path = Path(self.config.training.training_images_path),
             all_params = self.params,
             params_image_size = self.params.IMAGE_SIZE,
             params_batch_size = self.params.BATCH_SIZE,

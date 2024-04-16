@@ -18,7 +18,7 @@ class PredictionPipeline:
         self.data_ingestion_config = self.config.get_data_ingestion_config()
 
     def _get_prediction_classes(self):
-        classes = sorted(os.listdir(self.data_ingestion_config.dataset_dir))
+        classes = self.params.CLASSES
         class_id_to_label = {i: class_name for i, class_name in enumerate(classes)}
         return class_id_to_label
     
@@ -39,5 +39,5 @@ class PredictionPipeline:
         prediction_classes = self._get_prediction_classes()
         predicted_class_label = prediction_classes[result]
         
-        return [{'image': predicted_class_label}]
+        return predicted_class_label
 

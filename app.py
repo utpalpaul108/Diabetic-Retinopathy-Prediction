@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS, cross_origin
 from diabeticRetinopathy.pipeline.diabetes.prediction_pipeline import PredictionPipeline, CustomData
+from diabeticRetinopathy.pipeline.diabetic_retinopathy.prediction_pipeline import PredictionPipeline as DRPrediction
 import os
 import pandas as pd
 import numpy as np
@@ -35,6 +36,8 @@ def trainDiabeticRetinopathyPredictionRoute():
 def predictRoute():
     try:
         dr_class_label = ''
+        config = read_yaml(CONFIG_FILE_PATH)
+        params = read_yaml(PARAMS_FILE_PATH)
 
         input_data = CustomData(
             Pregnancies=int(request.form.get('Pregnancies')),
@@ -59,31 +62,15 @@ def predictRoute():
         if prediction != 0:
             status = 'Diabetic'
 
-            config = read_yaml(CONFIG_FILE_PATH)
-            params = read_yaml(PARAMS_FILE_PATH)
+            prediction_config = config.prediction
+            create_directories([prediction_config.root_dir])
 
-            # prediction_config = config.prediction
-            create_directories(['artifacts/prediction'])
-
-            img_path = os.path.join('artifacts/prediction', 'inputImage.jpg')
-
+            img_path = os.path.join(prediction_config.root_dir, 'inputImage.jpg')
             eye_image = request.files['eye_image']
             eye_image.save(img_path)
 
-            # Load Model
-            dl_model = load_model('artifacts/training/dr_detection_model.h5')
-
-            # Load and preprocess the test image
-            img = image.load_img(img_path, target_size=(512, 512))
-            img_array = image.img_to_array(img)
-            img_array = np.expand_dims(img_array, axis=0)
-            img_array /= 255.0
-
-            predictions = dl_model.predict(img_array)
-            predicted_class = np.argmax(predictions)
-            classes = ['No DR', 'Mild', 'Moderate', 'Severe', 'Proliferative DR']
-            dr_class_label = classes[predicted_class]
-        
+            classifier = DRPrediction(img_path)
+            dr_class_label = classifier.predict()    
 
         return render_template('index.html', prediction=status, dr_class= dr_class_label, show_prediction=True)
 
