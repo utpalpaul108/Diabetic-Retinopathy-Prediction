@@ -4,8 +4,16 @@ artifacts_root: artifacts
 data_ingestion:
   root_dir: artifacts/data_ingestion
   source_URL: https://www.kaggle.com/competitions/aptos2019-blindness-detection
+  ml_data_source_url: https://www.kaggle.com/datasets/mrsimple07/diabetes-prediction
   raw_dataset_dir: artifacts/data_ingestion/raw_dataset
   dataset_dir: artifacts/data_ingestion/dataset
+  ml_dataset_dir: artifacts/data_ingestion/ml_dataset
+  ml_data_path: artifacts/data_ingestion/ml_dataset/diabetes.csv
+
+# For data preprocessor
+data_preprocessor:
+  root_dir: artifacts/preprocessor
+  preprocessor_path: artifacts/preprocessor/preprocessor.keras
 
 # For prepare base model
 prepare_base_model:
@@ -23,8 +31,7 @@ prepare_callbacks:
 training:
   root_dir: artifacts/training
   trained_model_path: artifacts/training/dr_detection_model.h5
-  trained_ml_model_path: artifacts/training/diabetes_prediction_model.h5
-  ml_preprocessor_path: artifacts/training/preprocessor.h5
+  best_ml_model_path: artifacts/training/diabetes_prediction_model.h5
   training_file_path: artifacts/data_ingestion/dataset/train.csv
   test_file_path: artifacts/data_ingestion/dataset/test.csv
   training_images_path: artifacts/data_ingestion/dataset/train_images

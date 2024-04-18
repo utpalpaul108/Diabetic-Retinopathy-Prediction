@@ -1,6 +1,6 @@
 from diabeticRetinopathy.constants import *
 from diabeticRetinopathy.utils import read_yaml, create_directories
-from diabeticRetinopathy.entity import DataIngestionConfig, PrepareBaseModelConfig, PrepareCallbacksConfig, TrainingConfig, EvaluationConfig
+from diabeticRetinopathy.entity import DataIngestionConfig, PrepareBaseModelConfig, PrepareCallbacksConfig, TrainingConfig, EvaluationConfig, MLDataIngestionConfig, MLDataPreprocessingConfig, MLModelTrainingConfig
 import os
 
 # Configuration Manager
@@ -10,7 +10,47 @@ class ConfigurationManager:
         self.config = read_yaml(config_filepath)
         self.params = read_yaml(params_filepath)
         create_directories([self.config.artifacts_root])
+    
+    # For ML Model Configuration
+    ###############################
+    def get_ml_data_ingestion_config(self) -> MLDataIngestionConfig: 
+        config = self.config.data_ingestion
+        create_directories([config.root_dir])
 
+        data_ingestion_config = MLDataIngestionConfig(
+            root_dir = Path(config.root_dir),
+            ml_data_source_url = config.ml_data_source_url,
+            raw_dataset_dir = Path(config.raw_dataset_dir),
+            ml_dataset_dir = Path(config.ml_dataset_dir),
+            ml_data_path = Path(config.ml_data_path)
+        )
+
+        return data_ingestion_config
+    
+    def get_ml_data_preprocessing_config(self) -> MLDataPreprocessingConfig:
+        config = self.config
+        create_directories([config.data_preprocessor.root_dir])
+
+        data_preprocessing_config = MLDataPreprocessingConfig(
+            data_path = Path(config.data_ingestion.ml_data_path),
+            preprocessor_path = Path(config.data_preprocessor.preprocessor_path)
+        )
+
+        return data_preprocessing_config
+    
+    def get_ml_model_training_config(self) -> MLModelTrainingConfig:
+        config= self.config.training
+        create_directories([config.root_dir])
+
+        model_training_config = MLModelTrainingConfig(
+            best_ml_model_path = Path(config.best_ml_model_path)
+        )
+
+        return  model_training_config
+
+
+    # For DL Model Configuration
+    ###############################
     def get_data_ingestion_config(self) -> DataIngestionConfig: 
         config = self.config.data_ingestion
         create_directories([config.root_dir])

@@ -1,12 +1,13 @@
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS, cross_origin
-from diabeticRetinopathy.pipeline.diabetes.prediction_pipeline import PredictionPipeline, CustomData
+from diabeticRetinopathy.pipeline.diabetes.prediction_pipeline import PredictionPipeline as MLPrediction
 from diabeticRetinopathy.pipeline.diabetic_retinopathy.prediction_pipeline import PredictionPipeline as DRPrediction
+from diabeticRetinopathy.pipeline.diabetes.training_pipeline import TrainingPipeline as MLTraining
+from diabeticRetinopathy.pipeline.diabetic_retinopathy.training_pipeline import TrainingPipeline as DLTraining
 import os
 import pandas as pd
 import numpy as np
-from diabeticRetinopathy.utils import read_yaml, load_object, create_directories, decodeImage
-import joblib
+from diabeticRetinopathy.utils import read_yaml, load_object, create_directories
 from diabeticRetinopathy.constants import *
 from keras.models import load_model
 from keras.preprocessing import image
@@ -22,13 +23,15 @@ def home():
 
 @app.route('/train-diabetes-prediction-model')
 def trainDiabetesPredictionRoute():
-    pass
-    return 'Model trained successfully'
+    training_pipeline = MLTraining()
+    training_pipeline.train()
+    return 'Diabetes Prediction Model trained successfully'
 
 @app.route('/train-diabetic-retinopathy-prediction-model')
 def trainDiabeticRetinopathyPredictionRoute():
-    pass
-    return 'Model trained successfully'
+    training_pipeline = DLTraining()
+    training_pipeline.train()
+    return 'Diabetic Retinopathy Model trained successfully'
 
 
 @app.route('/predict', methods=['POST'])
@@ -39,24 +42,20 @@ def predictRoute():
         config = read_yaml(CONFIG_FILE_PATH)
         params = read_yaml(PARAMS_FILE_PATH)
 
-        input_data = CustomData(
-            Pregnancies=int(request.form.get('Pregnancies')),
-            Glucose=int(request.form.get('Glucose')),
-            BloodPressure=int(request.form.get('BloodPressure')),
-            SkinThickness=int(request.form.get('SkinThickness')),
-            Insulin=int(request.form.get('Insulin')),
-            BMI=float(request.form.get('BMI')),
-            DiabetesPedigreeFunction=float(request.form.get('DiabetesPedigreeFunction')),
-            Age=int(request.form.get('Age'))
-        )
+        input_features = {
+            'Pregnancies': [int(request.form.get('Pregnancies'))],
+            'Glucose': [int(request.form.get('Glucose'))],
+            'BloodPressure': [int(request.form.get('BloodPressure'))],
+            'SkinThickness': [int(request.form.get('SkinThickness'))],
+            'Insulin': [int(request.form.get('Insulin'))],
+            'BMI': [float(request.form.get('BMI'))],
+            'DiabetesPedigreeFunction': [float(request.form.get('DiabetesPedigreeFunction'))],
+            'Age': [int(request.form.get('Age'))]
+        }
 
-        input_data = input_data.get_data_as_dataframe()
-
-        model = joblib.load('artifacts/training/diabetes_prediction_model.pkl')
-        preprocessor = joblib.load('artifacts/training/preprocessor.pkl')
-
-        features_scale = preprocessor.transform(input_data)
-        prediction = model.predict(features_scale)[0]
+        input_features = pd.DataFrame(input_features)
+        prediction_pipeline = MLPrediction()
+        prediction = prediction_pipeline.predict(input_features)
         status = 'Non-Diabetic'
         
         if prediction != 0:

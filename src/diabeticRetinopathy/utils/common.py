@@ -180,6 +180,24 @@ def encodeImageIntoBase64(img_path: Path):
         img_content = f.read()
         return base64.b64encode(img_content)
     
+
+@ensure_annotations
+def save_object(path: Path, obj):
+    """save object data
+    
+       Args:
+            path (Path): path to save object data
+            boj (Any): data to be saved as object
+    """
+    try:
+        dir_name = os.path.dirname(path)
+        os.makedirs(dir_name, exist_ok=True)
+        with open(path, "wb") as file_obj:
+            pickle.dump(obj, file_obj)
+    except Exception as e:
+        raise e
+    
+    
 @ensure_annotations
 def load_object(file_path: Path):
     try:

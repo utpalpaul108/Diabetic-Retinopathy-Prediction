@@ -1,6 +1,29 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+# For ML Model
+################################################################
+@dataclass(frozen=True)
+class MLDataIngestionConfig:
+    root_dir: Path
+    ml_data_source_url: str
+    raw_dataset_dir: Path
+    ml_dataset_dir: Path
+    ml_data_path: Path
+
+@dataclass(frozen=True)
+class MLDataPreprocessingConfig:
+    data_path: Path
+    preprocessor_path: Path
+
+@dataclass(frozen=True)
+class MLModelTrainingConfig:
+    best_ml_model_path: Path
+
+
+# For DL Model
+################################################################
+
 @dataclass(frozen=True)
 class DataIngestionConfig:
     root_dir: Path

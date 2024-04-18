@@ -13,9 +13,9 @@ class TrainingPipeline:
             config = ConfigurationManager()
         
             # Data Ingestion
-            data_ingestion_config = config.get_data_ingestion_config()
-            data_ingestion = DataIngestion(config=data_ingestion_config)
-            data_ingestion.initiate_data_ingestion()
+            # data_ingestion_config = config.get_data_ingestion_config()
+            # data_ingestion = DataIngestion(config=data_ingestion_config)
+            # data_ingestion.initiate_data_ingestion()
 
             # Prepare Base Model
             prepare_base_model_config = config.get_prepare_base_model_config()
