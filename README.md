@@ -5,7 +5,7 @@
 
 The objective of this project is to develop a computer vision application capable of detecting signs of diabetes and diabetic retinopathy from retinal images. By leveraging advanced image processing techniques and machine learning algorithms, the system aims to assist healthcare professionals in early diagnosis and monitoring of diabetic patients.
 
-## Examples
+## Example
 
 <img src="examples/example_01.png">
 
@@ -78,7 +78,10 @@ http://localhost:8080/train-diabetes-prediction-model
 http://localhost:8080/train-diabetic-retinopathy-prediction-model
 
 ```
-After completing the training, you can now detect diabetes and diabetic retinopathy.
+After completing the training, you can now predict the signs of diabetes and diabetic retinopathy from retinal images.
+```bash
+http://localhost:8080
+```
 
 
 	
