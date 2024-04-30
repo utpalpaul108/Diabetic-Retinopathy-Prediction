@@ -36,8 +36,8 @@ class PredictionPipeline:
         predictions = model.predict(test_image)
         result = np.argmax(predictions)
 
-        prediction_classes = self._get_prediction_classes()
-        predicted_class_label = prediction_classes[result]
+        # prediction_classes = self._get_prediction_classes()
+        # predicted_class_label = prediction_classes[result]
         
-        return predicted_class_label
+        return result
 
