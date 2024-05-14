@@ -18,7 +18,8 @@ class PredictionPipeline:
             # Scale the input features and predict
             scaled_features = preprocessor.transform(input_features)
             prediction = model.predict(scaled_features)
-            return prediction[0]
+            probabilities = model.predict_proba(scaled_features)
+            return prediction[0], probabilities[0]
 
         except Exception as e:
             raise e

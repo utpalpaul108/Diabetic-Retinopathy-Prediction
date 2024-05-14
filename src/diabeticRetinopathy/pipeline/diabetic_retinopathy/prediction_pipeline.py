@@ -35,9 +35,11 @@ class PredictionPipeline:
         test_image = np.expand_dims(test_image, axis = 0)
         predictions = model.predict(test_image)
         result = np.argmax(predictions)
+        
+        probabilities = [(predictions[0][0]), (1-predictions[0][0])]
 
         # prediction_classes = self._get_prediction_classes()
         # predicted_class_label = prediction_classes[result]
         
-        return result
+        return result, probabilities
 
