@@ -10,8 +10,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         .banner {
-            margin-top: 60px;
-            margin-bottom: 60px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .content {
@@ -23,92 +23,130 @@
             max-height: 200px;
             margin-top: 10px;
         }
+
+        .bg-image {
+            background-image: url('Pec_Logo.jpeg');
+        }
+
+        .pecLogo {
+            width: 150px;
+            /* height: 600px; */
+            border-radius: 140px;
+            background-color: whitesmoke;
+            margin: 20px;
+        }
+
+        .pecCentLogo {
+            width: 300px;
+            margin: 20px;
+
+        }
+
+        .headerSetion {
+            display: flex;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            justify-content: space-around;
+        }
+
+        .headingDiab {
+            align-self: center;
+        }
     </style>
 </head>
 
 <body>
 
-    <header class="bg-primary text-center mt-5">
-        <div class="container">
+    <header class=" bg-primary text-center headerSetion">
+
+        <img src="https://i.ibb.co/6yq92Lb/pec-seal.png" class="pecLogo" alt="pec-seal" border="0">
+        <div class="container headingDiab">
             <h1 class="font-weight-light text-white banner">Diabetic Retinopathy Prediction System</h1>
         </div>
+        <img src="https://i.ibb.co/dtc6c0v/pec-centenary-logo.jpg" class="pecCentLogo" alt="pec-centenary-logo"
+            border="0">
     </header>
 
     <div class="container content">
 
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">Input Features</div>
                 <div class="panel-body">
                     <form id="image-upload-form" action="{{ url_for('predictRoute') }}" enctype="multipart/form-data"
                         method="post">
+                        <div class="col-md-6">
 
-                        <div class="form-group">
-                            <label for="Pregnancies">Pregnancies:</label>
-                            <input type="number" class="form-control" id="Pregnancies" placeholder="Pregnancies"
-                                name="Pregnancies" step="any" required>
+                            <div class="form-group">
+                                <label for="Pregnancies">Pregnancies:</label>
+                                <input type="number" class="form-control" id="Pregnancies" placeholder="Pregnancies"
+                                    name="Pregnancies" step="any" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Glucose">Glucose:</label>
+                                <input type="number" class="form-control" id="Glucose" placeholder="Glucose"
+                                    name="Glucose" step="any" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="BloodPressure">Blood Pressure:</label>
+                                <input type="number" class="form-control" id="BloodPressure"
+                                    placeholder="Blood Pressure" name="BloodPressure" step="any" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="SkinThickness">Skin Thickness:</label>
+                                <input type="number" class="form-control" id="SkinThickness"
+                                    placeholder="Skin Thickness" name="SkinThickness" step="any" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Insulin">Insulin:</label>
+                                <input type="number" class="form-control" id="Insulin" placeholder="Insulin"
+                                    name="Insulin" step="any" required>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label for="BMI">BMI:</label>
+                                <input type="number" class="form-control" id="BMI" placeholder="BMI" name="BMI"
+                                    step="any" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DiabetesPedigreeFunction">Diabetes Pedigree Function:</label>
+                                <input type="number" class="form-control" id="DiabetesPedigreeFunction"
+                                    placeholder="Diabetes Pedigree Function" name="DiabetesPedigreeFunction" step="any"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Age">Age:</label>
+                                <input type="number" class="form-control" id="Age" placeholder="Age" name="Age"
+                                    step="any" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="imageInput">Eye Image:</label>
+                                <input type="file" name="eye_image" class="form-control-file" id="imageInput"
+                                    accept="image/*" required>
+                            </div>
+
+                            <div class="form-group" id="imagePreview"></div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-block ">Submit</button>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="Glucose">Glucose:</label>
-                            <input type="number" class="form-control" id="Glucose" placeholder="Glucose" name="Glucose"
-                                step="any" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="BloodPressure">Blood Pressure:</label>
-                            <input type="number" class="form-control" id="BloodPressure" placeholder="Blood Pressure"
-                                name="BloodPressure" step="any" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="SkinThickness">Skin Thickness:</label>
-                            <input type="number" class="form-control" id="SkinThickness" placeholder="Skin Thickness"
-                                name="SkinThickness" step="any" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Insulin">Insulin:</label>
-                            <input type="number" class="form-control" id="Insulin" placeholder="Insulin" name="Insulin"
-                                step="any" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="BMI">BMI:</label>
-                            <input type="number" class="form-control" id="BMI" placeholder="BMI" name="BMI" step="any"
-                                required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="DiabetesPedigreeFunction">Diabetes Pedigree Function:</label>
-                            <input type="number" class="form-control" id="DiabetesPedigreeFunction"
-                                placeholder="Diabetes Pedigree Function" name="DiabetesPedigreeFunction" step="any"
-                                required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Age">Age:</label>
-                            <input type="number" class="form-control" id="Age" placeholder="Age" name="Age" step="any"
-                                required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="imageInput">Eye Image:</label>
-                            <input type="file" name="eye_image" class="form-control-file" id="imageInput"
-                                accept="image/*" required>
-                        </div>
-
-                        <div class="form-group" id="imagePreview"></div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-block ">Submit</button>
-                        </div>
                     </form>
 
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">Prediction</div>
                 <div class="panel-body">
@@ -117,8 +155,18 @@
                     {% endif %}
                 </div>
             </div>
+
+            <div class="bg-primary mb-0">
+                <div class="container">
+                    <h2 class="text-white">Major Project 2024</h2>
+                    <h4 class="my-4">Under the guidance of: <br> <br> Dr. Sukhwinder Singh <br> Dept. of Electronics &
+                        Communication</h4>
+                </div>
+            </div>
         </div>
     </div>
+
+
 
     <script>
         document.getElementById('imageInput').addEventListener('change', function () {
