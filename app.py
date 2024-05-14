@@ -56,7 +56,7 @@ def predictRoute():
         # ML Model Prediction
         input_features = pd.DataFrame(input_features)
         prediction_pipeline = MLPrediction()
-        ml_prediction = prediction_pipeline.predict(input_features)
+        ml_prediction, ml_probabilities = prediction_pipeline.predict(input_features)
 
         # DL Model Prediction
         prediction_config = config.prediction
@@ -65,15 +65,20 @@ def predictRoute():
         eye_image = request.files['eye_image']
         eye_image.save(img_path)
         classifier = DRPrediction(img_path)
-        dl_prediction = classifier.predict() 
+        dl_prediction, dl_probabilities = classifier.predict() 
 
         if (ml_prediction != 0) or (dl_prediction != 0):
+            if dl_prediction != 0:
+                probability = dl_probabilities[1]
+            else:
+                probability = ml_probabilities[1]
             status = 'Diabetic'
         else:
+            probability = dl_probabilities[0]
             status = 'Non-Diabetic'
             
 
-        return render_template('index.html', prediction=status, show_prediction=True)
+        return render_template('index.html', status=status, probability=probability*100, show_prediction=True)
 
     
     except Exception as e:
